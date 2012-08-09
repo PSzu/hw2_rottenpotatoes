@@ -9,16 +9,22 @@ class MoviesController < ApplicationController
   def index
     if params.has_key?(:sort_key)
       order_key = params[:sort_key]
+    elsif session.has_key?(:sort_key)
+      order_key = session[:sort_key]
     else
       order_key = ""
     end
     if params.has_key?(:ratings)
-      ratings = params[:ratings].keys
+      ratings = params[:ratings]
+    elsif session.has_key?(:ratings)
+      ratings = session[:ratings]
     else
       ratings = []
     end
     @all_ratings = Movie.find(:all, :select => 'distinct rating').map(&:rating)
-    @movies = Movie.find(:all, :conditions => [ "rating IN (?)", ratings ], :order => order_key)
+    @movies = Movie.find(:all, :conditions => [ "rating IN (?)", ratings.keys ], :order => order_key)
+    session[:ratings] = ratings
+    session[:sort_key] = order_key
     #debugger
   end
 

@@ -3,11 +3,11 @@
 
 =form_tag movies_path, :method => :get do
   Include:
-  - is_rating = params[:ratings].nil? == false
+  - is_rating = params[:ratings].nil? == false or session[:ratings].nil? == false
   - @all_ratings.each do |rating|
     rating
     = rating
-    = check_box_tag "ratings[#{rating}]", 1, is_rating == true ? params[:ratings].has_key?(rating) : false, :id => "ratings_#{rating}"
+    = check_box_tag "ratings[#{rating}]", 1, is_rating == true ? (params[:ratings].has_key?(rating) or session[:ratings].has_key?(rating)): false, :id => "ratings_#{rating}"
   = submit_tag 'Refresh', :id => 'ratings_submit'
 
 %table#movies
