@@ -7,15 +7,18 @@ class MoviesController < ApplicationController
   end
 
   def index
-    sort_titles = params[:sort_titles]
-    sort_date = params[:sort_date]
-    if !sort_titles.nil? and sort_titles == "true"
-      @movies = Movie.order("title")
-    elsif !sort_date.nil? and sort_date == "true"
-      @movies = Movie.order("release_date")
+    if params.has_key?(:sort_key)
+      order_key = params[:sort_key]
     else
-      @movies = Movie.all
+      order_key = ""
     end
+    if params.has_key?(:ratings)
+      ratings = params[:ratings].keys
+    else
+      ratings = []
+    end
+    @all_ratings = Movie.find(:all, :select => 'distinct rating').map(&:rating)
+    @movies = Movie.find(:all, :conditions => [ "rating IN (?)", ratings ], :order => order_key)
   end
 
   def new
