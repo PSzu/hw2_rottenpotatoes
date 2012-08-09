@@ -19,6 +19,7 @@ class MoviesController < ApplicationController
     end
     @all_ratings = Movie.find(:all, :select => 'distinct rating').map(&:rating)
     @movies = Movie.find(:all, :conditions => [ "rating IN (?)", ratings ], :order => order_key)
+    #debugger
   end
 
   def new
