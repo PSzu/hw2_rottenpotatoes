@@ -19,7 +19,7 @@ class MoviesController < ApplicationController
     elsif session.has_key?(:ratings)
       ratings = session[:ratings]
     else
-      ratings = []
+      ratings = Hash.new
     end
     @all_ratings = Movie.find(:all, :select => 'distinct rating').map(&:rating)
     @movies = Movie.find(:all, :conditions => [ "rating IN (?)", ratings.keys ], :order => order_key)
